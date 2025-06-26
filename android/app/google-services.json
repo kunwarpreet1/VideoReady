@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "131990356223",
+    "project_id": "videoready-486e4",
+    "storage_bucket": "videoready-486e4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131990356223:android:79f4400c99cd7d475cccca",
+        "android_client_info": {
+          "package_name": "com.videoready"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfVnS-5Dl_IL0IrkzmgMJOlC6bTGKMQ-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

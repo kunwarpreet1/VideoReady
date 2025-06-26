@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="44" height="44" viewBox="0 0 44 44">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Path_17684" data-name="Path 17684" d="M171.644,23.541a6.154,6.154,0,0,0-2.914.8,6.028,6.028,0,0,0-2.156,2.089,5.826,5.826,0,0,0-.7,1.721l21.611,12.34,7.787,4.441a5.265,5.265,0,0,0,1.766-7.019,5.393,5.393,0,0,0-2.016-2.018L174.759,24.343a6.1,6.1,0,0,0-3.013-.8Z" transform="translate(-165.87 -23.541)" fill="none"/>
+    </clipPath>
+    <radialGradient id="radial-gradient" cx="0.5" cy="0.5" r="0.628" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#26a9e0"/>
+      <stop offset="1" stop-color="#2b388f"/>
+    </radialGradient>
+    <clipPath id="clip-path-2">
+      <path id="Path_17685" data-name="Path 17685" d="M171.644,23.541a6.154,6.154,0,0,0-2.914.8,6.028,6.028,0,0,0-2.156,2.089,5.826,5.826,0,0,0-.7,1.721l21.611,12.34,7.787,4.441a5.268,5.268,0,0,0,2.44-4.389v-.1a5.288,5.288,0,0,0-.673-2.526,5.393,5.393,0,0,0-2.016-2.018L174.759,24.344a6.092,6.092,0,0,0-3.013-.8Z" transform="translate(-165.87 -23.541)" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-path-3">
+      <path id="Path_17687" data-name="Path 17687" d="M173.467,87.215v-.043l-7.676,4.344a5.834,5.834,0,0,0,.721,1.8,6.012,6.012,0,0,0,2.158,2.09,6.126,6.126,0,0,0,2.914.8h.106a6.114,6.114,0,0,0,3.014-.8l20.29-11.541c.083-.046.168-.1.251-.154l-7.8-4.441Z" transform="translate(-165.791 -79.269)" fill="none"/>
+    </clipPath>
+    <radialGradient id="radial-gradient-3" r="0.702" xlink:href="#radial-gradient"/>
+    <clipPath id="clip-path-4">
+      <path id="Path_17688" data-name="Path 17688" d="M186.835,51.038l-2.626-1.521-.009,0Zm-21.476-11-.005,19.9,7.7-4.255,0-12.608L184.2,49.513,165.51,38.7a6.179,6.179,0,0,0-.152,1.34" transform="translate(-165.353 -38.698)" fill="none"/>
+    </clipPath>
+    <radialGradient id="radial-gradient-4" cx="0.992" cy="0.548" r="0.004" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-5" r="0.503" xlink:href="#radial-gradient"/>
+  </defs>
+  <g id="logo" transform="translate(-16 -51)">
+    <rect id="Rectangle_4281" data-name="Rectangle 4281" width="44" height="44" transform="translate(16 51)" fill="#fff" opacity="0"/>
+    <g id="Group_15177" data-name="Group 15177" transform="translate(-99.375 -37.733)">
+      <g id="Group_10246" data-name="Group 10246" transform="translate(121.537 93.733)">
+        <g id="Group_10245" data-name="Group 10245" clip-path="url(#clip-path)">
+          <rect id="Rectangle_4531" data-name="Rectangle 4531" width="31.838" height="21.391" transform="translate(0 0)" fill="url(#radial-gradient)"/>
+        </g>
+      </g>
+      <g id="Group_10248" data-name="Group 10248" transform="translate(121.537 93.733)">
+        <g id="Group_10247" data-name="Group 10247" clip-path="url(#clip-path-2)">
+          <rect id="Rectangle_4532" data-name="Rectangle 4532" width="31.837" height="21.391" fill="url(#radial-gradient)"/>
+        </g>
+      </g>
+      <g id="Group_10252" data-name="Group 10252" transform="translate(121.514 110.799)">
+        <g id="Group_10251" data-name="Group 10251" clip-path="url(#clip-path-3)">
+          <rect id="Rectangle_4534" data-name="Rectangle 4534" width="29.454" height="16.934" fill="url(#radial-gradient-3)"/>
+        </g>
+      </g>
+      <g id="Group_10254" data-name="Group 10254" transform="translate(121.375 98.414)">
+        <g id="Group_10253" data-name="Group 10253" clip-path="url(#clip-path-4)">
+          <rect id="Rectangle_4535" data-name="Rectangle 4535" width="21.482" height="21.243" transform="translate(0 0)" fill="url(#radial-gradient-4)"/>
+        </g>
+      </g>
+      <g id="Group_10256" data-name="Group 10256" transform="translate(121.375 98.414)">
+        <g id="Group_10255" data-name="Group 10255" clip-path="url(#clip-path-4)">
+          <rect id="Rectangle_4536" data-name="Rectangle 4536" width="21.482" height="21.243" transform="translate(0 0)" fill="url(#radial-gradient-5)"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
