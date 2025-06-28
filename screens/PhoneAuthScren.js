@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
 import auth from '@react-native-firebase/auth';
+import { handleUserAuth } from '../utils/userUtils';
 
 const PhoneAuthScreen = () => {
+  const dispatch = useDispatch();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [confirm, setConfirm] = useState(null);
   const [code, setCode] = useState('');
@@ -20,8 +23,14 @@ const PhoneAuthScreen = () => {
   // Step 2: Confirm code
   const confirmCode = async () => {
     try {
-      await confirm.confirm(code);
+      const result = await confirm.confirm(code);
+      const firebaseUser = result.user;
+      
+      // Handle user authentication using utility function
+      await handleUserAuth(dispatch, firebaseUser);
+      
       Alert.alert('Phone auth successful 🎉');
+      // Navigation will be handled automatically by AppNavigator based on Redux state
     } catch (error) {
       Alert.alert('Invalid code 😢', error.message);
     }
@@ -31,7 +40,7 @@ const PhoneAuthScreen = () => {
     <View style={styles.container}>
       {!confirm ? (
         <>
-        <Text style={{textAlign:"center",fontSize:40, color:"white",marginBottom:40}}> Mobile Login</Text>
+          <Text style={{ textAlign: "center", fontSize: 40, color: "white", marginBottom: 40 }}> Mobile Login</Text>
           <Text style={styles.label}>Enter Phone Number</Text>
           <TextInput
             style={styles.input}
@@ -62,9 +71,24 @@ const PhoneAuthScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center',padding: 20 ,backgroundColor:'#001122'},
-  input: { borderBottomWidth: 1,borderColor:"white", marginBottom: 20, fontSize: 18 , color:"white" },
-  label: { fontSize: 16, marginBottom: 10 , color:"white"}
+  container: { 
+    flex: 1, 
+    justifyContent: 'center', 
+    padding: 20, 
+    backgroundColor: '#001122' 
+  },
+  input: { 
+    borderBottomWidth: 1, 
+    borderColor: "white", 
+    marginBottom: 20, 
+    fontSize: 18, 
+    color: "white" 
+  },
+  label: { 
+    fontSize: 16, 
+    marginBottom: 10, 
+    color: "white" 
+  }
 });
 
 export default PhoneAuthScreen;

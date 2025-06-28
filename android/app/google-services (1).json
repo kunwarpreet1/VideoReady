@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "232656643126",
+    "firebase_url": "https://userauthentication-dd796-default-rtdb.firebaseio.com",
+    "project_id": "userauthentication-dd796",
+    "storage_bucket": "userauthentication-dd796.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232656643126:android:aa8ca5f8173d240c69e497",
+        "android_client_info": {
+          "package_name": "com.videoready"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1BUG0NVGWp2RzSnpsWQWupgu0IZMd4XE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,7 +2,16 @@ import React from 'react';
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-export default function Banner() {
+export default function Banner({ navigation }) {
+  const handleWatchNow = () => {
+    navigation.navigate('VideoPlayer', {
+      videoTitle: 'Morbius',
+      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      videoDescription: 'Biochemist Michael Morbius tries to cure himself of a rare blood disease, but he inadvertently infects himself with a form of vampirism instead.',
+      videoGenre: 'Action | Thriller | Suspense'
+    });
+  };
+
   return (
     <ImageBackground
       source={require('../../assets/images/homeassets/morbius.jpg')}
@@ -15,7 +24,7 @@ export default function Banner() {
             <FontAwesome name="info-circle" size={18} color="#fff" />
             <Text style={styles.buttonText}> More details</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, styles.watchNow]}>
+          <TouchableOpacity style={[styles.button, styles.watchNow]} onPress={handleWatchNow}>
             <FontAwesome name="play" size={18} color="#fff" />
             <Text style={styles.buttonText}> Watch Now</Text>
           </TouchableOpacity>

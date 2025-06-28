@@ -11,11 +11,15 @@ import {
 } from 'react-native';
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import auth from '@react-native-firebase/auth';
 import Home from './Home';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout, clearUserFromStorage, selectCurrentUser, selectCurrentUserProfileImage } from '../src/redux/slice/userSlice';
+import { handleUserLogout } from '../utils/userUtils';
 
 const Drawer = createDrawerNavigator();
 
-// 📄 Main screen content
+// 🎯 Main screen component
 function MainScreen() {
   return (
     <View style={styles.screen}>
@@ -26,7 +30,9 @@ function MainScreen() {
 
 // 🎨 Custom drawer content
 function CustomDrawerContent(props) {
-  const [profileImage, setProfileImage] = useState(null);
+  const dispatch = useDispatch();
+  const currentUser = useSelector(selectCurrentUser);
+  const profileImage = useSelector(selectCurrentUserProfileImage);
 
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
@@ -49,35 +55,38 @@ function CustomDrawerContent(props) {
     }
   };
 
-  const openEditOptions = async () => {
-    Alert.alert('Edit Profile Picture', 'Choose an option', [
-      {
-        text: 'Take Photo',
-        onPress: async () => {
-          const hasPermission = await requestCameraPermission();
-          if (hasPermission) {
-            launchCamera({ mediaType: 'photo' }, (res) => {
-              if (!res.didCancel && !res.errorCode && res.assets?.[0]) {
-                setProfileImage(res.assets[0].uri);
-              }
-            });
-          } else {
-            Alert.alert('Permission Denied', 'Camera permission is required.');
-          }
-        },
-      },
-      {
-        text: 'Choose from Gallery',
-        onPress: () => {
-          launchImageLibrary({ mediaType: 'photo' }, (res) => {
-            if (!res.didCancel && !res.errorCode && res.assets?.[0]) {
-              setProfileImage(res.assets[0].uri);
+  const handleSignOut = () => {
+    Alert.alert(
+      'Sign Out',
+      'Are you sure you want to sign out?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Sign Out',
+          style: 'destructive',
+          onPress: async () => {
+            const success = await handleUserLogout(dispatch);
+            if (!success) {
+              Alert.alert('Error', 'Failed to sign out. Please try again.');
             }
-          });
+            // Navigation will automatically handle the redirect to sign-in
+          },
         },
-      },
-      { text: 'Cancel', style: 'cancel' },
-    ]);
+      ]
+    );
+  };
+
+  const handleMenuItemPress = (item) => {
+    if (item === 'Sign Out') {
+      handleSignOut();
+    } else if (item === 'My Profiles') {
+      props.navigation.navigate('EditProfile');
+    } else if (item === 'Downloaded Videos') {
+      props.navigation.navigate('DownloadedVideos');
+    } else {
+      // Handle other menu items here
+      console.log('Menu item pressed:', item);
+    }
   };
 
   const drawerItems = [
@@ -94,6 +103,9 @@ function CustomDrawerContent(props) {
     'Sign Out',
   ];
 
+  // Get display name from current user or use default
+  const displayName = currentUser?.displayName || currentUser?.email?.split('@')[0] || 'User';
+
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={styles.drawerContainer}>
       <View style={styles.profileSection}>
@@ -105,23 +117,23 @@ function CustomDrawerContent(props) {
           }
           style={styles.avatar}
         />
-        <Text style={styles.name}>Tony</Text>
-
-        {/* Edit Profile Button */}
-        <TouchableOpacity onPress={openEditOptions}>
-          <Text style={styles.editProfile}>Edit Profile</Text>
-        </TouchableOpacity>
-
-        {/* Reset Picture Button */}
-        <TouchableOpacity onPress={() => setProfileImage(null)}>
-          <Text style={[styles.editProfile, { color: '#ff6b6b' }]}>Reset Picture</Text>
-        </TouchableOpacity>
+        <Text style={styles.name}>{displayName}</Text>
       </View>
 
       <View style={styles.menuItems}>
         {drawerItems.map((item, index) => (
-          <TouchableOpacity key={index} onPress={() => {}} style={styles.menuItem}>
-            <Text style={styles.menuText}>{item}</Text>
+          <TouchableOpacity 
+            key={index} 
+            onPress={() => handleMenuItemPress(item)} 
+            style={[
+              styles.menuItem,
+              item === 'Sign Out' && styles.signOutItem
+            ]}
+          >
+            <Text style={[
+              styles.menuText,
+              item === 'Sign Out' && styles.signOutText
+            ]}>{item}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -188,9 +200,21 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     marginVertical: 10,
+    // paddingVertical: 8,
+    // paddingHorizontal: 12,
+    borderRadius: 6,
   },
   menuText: {
     color: '#fff',
     fontSize: 16,
+  },
+  signOutItem: {
+    // backgroundColor: '#ff6b6b20',
+    // borderWidth: 1,
+    // borderColor: '#ff6b6b',
+  },
+  signOutText: {
+    fontWeight: 'bold',
+    // color: '#ff6b6b',
   },
 });

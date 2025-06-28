@@ -1,24 +1,28 @@
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
-import VRLogo from '../assets/images/vr-logo.svg'; // SVG logo
+
 const SignInHeader = () => {
   return (
-
-    <View style={{flex:1, backgroundColor:"#001122", justifyContent:"center",alignItems:"center"
-    }}>
-              
-      <Text style={{fontSize:15,color:"white",fontWeight:"500",borderBottomWidth:2,borderColor:"white"}}>VideoReady</Text>
+    <View style={styles.header}>
+      <Text style={styles.title}>VideoReady</Text>
     </View>
-
- 
-    
-    // <SafeAreaView style={{ height:120,flex:1,justifyContent:"center",alignItems:"center",backgroundColor:"#001122"}}>
-    //            <VRLogo width={180} height={180}/>
-    // </SafeAreaView>
-    
-
-    
   )
 }
+
+const styles = StyleSheet.create({
+  header: {
+    height: 60,
+    backgroundColor: '#001122',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#334',
+  },
+  title: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: '600',
+  },
+});
 
 export default SignInHeader;

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import {
   StyleSheet,
-  ActivityIndicator,
   StatusBar,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -13,11 +12,14 @@ const Splash = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('Onboarding');
+      // Only navigate if navigation is available
+      if (navigation) {
+        navigation.replace('Onboarding');
+      }
     }, 6000); // 6-second splash screen
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [navigation]);
 
   return (
     <LinearGradient
@@ -26,7 +28,6 @@ const Splash = () => {
     >
       <StatusBar barStyle="light-content" backgroundColor="#000A1F" />
       <VRLogo width={170} height={170} style={styles.logo} />
-      {/* <ActivityIndicator size="large" color="#4FC3F7" style={styles.loader} /> */}
     </LinearGradient>
   );
 };
@@ -41,8 +42,5 @@ const styles = StyleSheet.create({
   },
   logo: {
     marginBottom: 30,
-  },
-  loader: {
-    marginTop: 20,
   },
 });

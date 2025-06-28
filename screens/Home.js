@@ -47,8 +47,8 @@
 
 // home.js
 import React from 'react';
-import { View, ScrollView, StyleSheet,Button } from 'react-native';
-import auth from '@react-native-firebase/auth';
+import { ScrollView, StyleSheet, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../components/homeScreenComponents/Header';
 import Banner from '../components/homeScreenComponents/Banner';
 import Section from '../components/homeScreenComponents/Section';
@@ -56,30 +56,22 @@ import Footer from '../components/homeScreenComponents/Footer';
 
 
 export default function Home({navigation}) {
-      const logout = () => {
-    auth().signOut().then(() => {
-     navigation.replace('SignIn');
-  });
-  };
-
   return (
-
-
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#000" />
       <Header />
 
-
-
       <ScrollView>
-
-        <Banner />
+        <Banner navigation={navigation} />
 
         <Section
           title="Flash Channel"
           items={[
-            { image: require('../assets/images/homeassets/sqidgame.png') },
+            { image: require('../assets/images/homeassets/squidgame.png') },
             { image: require('../assets/images/homeassets/kabirsingh.png') },
+            { image: require('../assets/images/homeassets/ballerina.jpeg') },
           ]}
+          navigation={navigation}
         />
 
         <Section
@@ -88,21 +80,15 @@ export default function Home({navigation}) {
             { image: require('../assets/images/homeassets/panchayat.png') },
             { image: require('../assets/images/homeassets/johnwick.png') },
             { image: require('../assets/images/homeassets/moneyheist.png') },
+            { image: require('../assets/images/homeassets/morbius.jpg') },
           ]}
+          navigation={navigation}
         />
       </ScrollView>
-                    <View>
-      <Button title="logout" onPress={logout}></Button>
-      </View>
-
+                  
       <Footer />
-                          <View>
-      <Button title="add photo" onPress={() =>navigation.navigate("camera")}/>
-      </View>
-                                <View>
-      <Button title="add Location" onPress={() =>navigation.navigate("Location")}/>
-      </View>
-    </View>
+     
+    </SafeAreaView>
   );
 }
 
