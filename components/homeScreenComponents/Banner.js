@@ -5,10 +5,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 export default function Banner({ navigation }) {
   const handleWatchNow = () => {
     navigation.navigate('VideoPlayer', {
-      videoTitle: 'Morbius',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      videoDescription: 'Biochemist Michael Morbius tries to cure himself of a rare blood disease, but he inadvertently infects himself with a form of vampirism instead.',
-      videoGenre: 'Action | Thriller | Suspense'
+      videoTitle: 'Morbius'
     });
   };
 

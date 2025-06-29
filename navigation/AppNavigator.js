@@ -106,16 +106,6 @@ const AppContent = () => {
             <Stack.Screen 
               name="VideoPlayer" 
               component={VideoPlayer} 
-              options={{
-                headerShown: true,
-                header: () => <VideoPlayerHeader />,
-                headerStyle: {
-                  backgroundColor: '#001122',
-                  
-                },
-                headerTintColor: '#fff',
-                headerBackVisible: false,
-              }}
             />
           </>
         ) : (

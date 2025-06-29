@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -20,32 +20,59 @@ import {
   selectIsDownloaded,
   selectCurrentDownload 
 } from '../src/redux/slice/downloadSlice';
+import VideoPlayerHeader from '../components/VideoPlayerHeader';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
+
+// Video data with the provided URL for all videos
+const VIDEOS = {
+  'Morbius': {
+    title: 'Morbius',
+    video: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    description: 'Biochemist Michael Morbius tries to cure himself of a rare blood disease, but he inadvertently infects himself with a form of vampirism instead.',
+    genre: 'Action | Thriller | Suspense',
+    cast: 'Jared Leto, Matt Smith, Adria Arjona, Jared Harris',
+    director: 'Daniel Espinosa'
+  },
+  'John Wick': {
+    title: 'John Wick',
+    video: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    description: 'An ex-hitman comes out of retirement to track down the gangsters who killed his dog and stole his car.',
+    genre: 'Action | Crime | Thriller',
+    cast: 'Keanu Reeves, Michael Nyqvist, Alfie Allen, Willem Dafoe',
+    director: 'Chad Stahelski'
+  },
+  'Kabir Singh': {
+    title: 'Kabir Singh',
+    video: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    description: 'A brilliant yet alcoholic surgeon goes down a self-destructive path when the love of his life gets married to someone else.',
+    genre: 'Drama | Romance',
+    cast: 'Shahid Kapoor, Kiara Advani, Arjan Bajwa, Suresh Oberoi',
+    director: 'Sandeep Reddy Vanga'
+  }
+};
 
 const VideoPlayerScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
-  const webViewRef = useRef(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const webViewRef = React.useRef();
   
-  // 🎬 WHERE TO ADD YOUR MOVIE URLS - Change this section
-  const { videoTitle, videoUrl, videoDescription, videoGenre } = route.params || {
-    videoTitle: 'Morbius',
-    // 🔗 REPLACE THIS URL WITH YOUR MOVIE URL
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    videoDescription: 'Biochemist Michael Morbius tries to cure himself of a rare blood disease, but he inadvertently infects himself with a form of vampirism instead.',
-    videoGenre: 'Action | Thriller | Suspense'
-  };
+  // Get video data from navigation params
+  const { videoTitle = 'Morbius' } = route.params || {};
+  const videoData = VIDEOS[videoTitle] || VIDEOS['Morbius'];
+  
+  const { title, video, description, genre, cast, director } = videoData;
 
-  // Generate a unique video ID
-  const videoId = `${videoTitle.replace(/\s+/g, '_')}_${Date.now()}`;
+  // Create unique ID for download tracking
+  const videoId = `${title.replace(/\s+/g, '_')}_${Date.now()}`;
   
+  // Check if video is downloaded
   const isDownloaded = useSelector(state => selectIsDownloaded(state, videoId));
   const currentDownload = useSelector(selectCurrentDownload);
   const isCurrentlyDownloading = currentDownload && currentDownload.videoId === videoId;
 
-  // Create HTML content for video player
-  const createVideoHTML = (videoUrl) => {
+  // Enhanced HTML for video player with better fullscreen support
+  const createVideoHTML = () => {
     return `
       <!DOCTYPE html>
       <html>
@@ -56,10 +83,10 @@ const VideoPlayerScreen = ({ route, navigation }) => {
               margin: 0;
               padding: 0;
               background-color: #000;
+              height: 100vh;
               display: flex;
               justify-content: center;
               align-items: center;
-              height: 100vh;
               overflow: hidden;
             }
             video {
@@ -68,74 +95,105 @@ const VideoPlayerScreen = ({ route, navigation }) => {
               object-fit: contain;
               background-color: #000;
             }
-            .controls {
-              position: absolute;
-              bottom: 20px;
-              left: 50%;
-              transform: translateX(-50%);
-              background: rgba(0,0,0,0.7);
-              padding: 10px;
-              border-radius: 5px;
-              display: flex;
-              gap: 10px;
+            .video-container {
+              width: 100%;
+              height: 100%;
+              position: relative;
             }
-            .control-btn {
-              background: none;
-              border: none;
+            .fullscreen-controls {
+              position: absolute;
+              top: 10px;
+              right: 10px;
+              z-index: 1000;
+              display: none;
+            }
+            .fullscreen-controls button {
+              background: rgba(0,0,0,0.7);
               color: white;
-              font-size: 16px;
+              border: none;
+              padding: 8px 12px;
+              border-radius: 4px;
               cursor: pointer;
-              padding: 5px 10px;
+              font-size: 14px;
+            }
+            .video-container:fullscreen .fullscreen-controls {
+              display: block;
+            }
+            .video-container:-webkit-full-screen .fullscreen-controls {
+              display: block;
             }
           </style>
         </head>
         <body>
-          <video 
-            id="videoPlayer" 
-            controls 
-            autoplay 
-            playsinline
-            webkit-playsinline
-            x5-playsinline
-            x5-video-player-type="h5"
-            x5-video-player-fullscreen="true"
-            x5-video-orientation="landscape"
-          >
-            <source src="${videoUrl}" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
+          <div class="video-container">
+            <video 
+              id="videoPlayer"
+              controls 
+              autoplay 
+              playsinline
+              webkit-playsinline
+              x5-playsinline
+              x5-video-player-type="h5"
+              x5-video-player-fullscreen="true"
+              x5-video-orientation="landscape"
+              onwebkitbeginfullscreen="handleFullscreenChange(true)"
+              onwebkitendfullscreen="handleFullscreenChange(false)"
+              onfullscreenchange="handleFullscreenChange(!!document.fullscreenElement)"
+              onwebkitfullscreenchange="handleFullscreenChange(!!document.webkitFullscreenElement)"
+            >
+              <source src="${video}" type="video/mp4">
+              <p>Your browser does not support the video tag.</p>
+            </video>
+            <div class="fullscreen-controls">
+              <button onclick="exitFullscreen()">Exit Fullscreen</button>
+            </div>
+          </div>
+          
           <script>
-            const video = document.getElementById('videoPlayer');
+            function handleFullscreenChange(isFullscreen) {
+              window.ReactNativeWebView.postMessage('fullscreen:' + isFullscreen);
+            }
             
-            // Handle fullscreen changes
-            video.addEventListener('webkitbeginfullscreen', function() {
-              window.ReactNativeWebView.postMessage('fullscreen:true');
+            function exitFullscreen() {
+              if (document.exitFullscreen) {
+                document.exitFullscreen();
+              } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+              }
+            }
+            
+            function toggleFullscreen() {
+              const video = document.getElementById('videoPlayer');
+              if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                if (video.requestFullscreen) {
+                  video.requestFullscreen();
+                } else if (video.webkitRequestFullscreen) {
+                  video.webkitRequestFullscreen();
+                }
+              } else {
+                exitFullscreen();
+              }
+            }
+            
+            // Handle messages from React Native
+            window.addEventListener('message', function(event) {
+              if (event.data === 'toggleFullscreen') {
+                toggleFullscreen();
+              }
             });
             
-            video.addEventListener('webkitendfullscreen', function() {
-              window.ReactNativeWebView.postMessage('fullscreen:false');
+            // Handle orientation changes
+            window.addEventListener('orientationchange', function() {
+              window.ReactNativeWebView.postMessage('orientation:' + window.orientation);
             });
             
             // Handle video events
-            video.addEventListener('error', function(e) {
-              window.ReactNativeWebView.postMessage('error:' + e.message);
+            document.getElementById('videoPlayer').addEventListener('loadedmetadata', function() {
+              window.ReactNativeWebView.postMessage('video:loaded');
             });
             
-            video.addEventListener('loadeddata', function() {
-              window.ReactNativeWebView.postMessage('loaded');
-            });
-            
-            // Enable fullscreen on double tap
-            let lastTap = 0;
-            video.addEventListener('touchend', function(e) {
-              const currentTime = new Date().getTime();
-              const tapLength = currentTime - lastTap;
-              if (tapLength < 500 && tapLength > 0) {
-                if (video.webkitSupportsFullscreen) {
-                  video.webkitEnterFullscreen();
-                }
-              }
-              lastTap = currentTime;
+            document.getElementById('videoPlayer').addEventListener('error', function(e) {
+              window.ReactNativeWebView.postMessage('video:error:' + e.target.error.message);
             });
           </script>
         </body>
@@ -143,6 +201,7 @@ const VideoPlayerScreen = ({ route, navigation }) => {
     `;
   };
 
+  // Handle messages from WebView
   const onMessage = (event) => {
     const message = event.nativeEvent.data;
     
@@ -151,28 +210,32 @@ const VideoPlayerScreen = ({ route, navigation }) => {
       setIsFullScreen(isFull);
       
       if (isFull) {
-        // Hide status bar and navigation elements in fullscreen
         StatusBar.setHidden(true);
       } else {
-        // Show status bar when exiting fullscreen
         StatusBar.setHidden(false);
       }
-    } else if (message.startsWith('error:')) {
-      Alert.alert('Video Error', 'Failed to load video. Please try again.');
-    } else if (message === 'loaded') {
-      console.log('Video loaded successfully');
+    } else if (message.startsWith('orientation:')) {
+      // Handle orientation changes
+      const orientation = message.split(':')[1];
+      console.log('Orientation changed to:', orientation);
+    } else if (message.startsWith('video:error:')) {
+      const error = message.split(':')[2];
+      Alert.alert('Video Error', `Failed to load video: ${error}`);
     }
   };
 
+  // Handle back button press
   const handleBackPress = () => {
     if (isFullScreen) {
       // Exit fullscreen first
-      webViewRef.current?.postMessage('exitFullscreen');
+      StatusBar.setHidden(false);
+      setIsFullScreen(false);
     } else {
       navigation.goBack();
     }
   };
 
+  // Handle download button press
   const handleDownload = () => {
     if (isDownloaded) {
       Alert.alert('Already Downloaded', 'This video is already downloaded.');
@@ -187,10 +250,10 @@ const VideoPlayerScreen = ({ route, navigation }) => {
     // Start download
     dispatch(startDownload({
       videoId,
-      videoTitle,
-      videoUrl,
-      videoDescription,
-      videoGenre,
+      videoTitle: title,
+      videoUrl: video,
+      videoDescription: description,
+      videoGenre: genre,
     }));
 
     // Simulate download progress
@@ -201,13 +264,14 @@ const VideoPlayerScreen = ({ route, navigation }) => {
         progress = 100;
         clearInterval(downloadInterval);
         dispatch(completeDownload({ videoId }));
-        Alert.alert('Download Complete', `${videoTitle} has been downloaded successfully!`);
+        Alert.alert('Download Complete', `${title} has been downloaded successfully!`);
       } else {
         dispatch(updateDownloadProgress({ videoId, progress }));
       }
     }, 500);
   };
 
+  // Get download button text
   const getDownloadButtonText = () => {
     if (isDownloaded) return 'Downloaded';
     if (isCurrentlyDownloading) {
@@ -217,32 +281,30 @@ const VideoPlayerScreen = ({ route, navigation }) => {
     return 'Download';
   };
 
+  // Get download button icon
   const getDownloadButtonIcon = () => {
     if (isDownloaded) return 'check';
     if (isCurrentlyDownloading) return 'spinner';
     return 'download';
   };
 
+  // Video player for both platforms
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#001122" />
       
-      {/* Back Button above Video Player */}
-      <TouchableOpacity 
-        style={styles.backButton}
-        onPress={handleBackPress}
-      >
-        <FontAwesome name="arrow-left" size={20} color="#fff" />
-      </TouchableOpacity>
+      <SafeAreaView style={styles.headerContainer}>
+        <VideoPlayerHeader />
+      </SafeAreaView>
       
-      {/* Video Player Section - WebView */}
       <View style={styles.videoContainer}>
         <WebView
           ref={webViewRef}
-          source={{ html: createVideoHTML(videoUrl) }}
+          source={{ html: createVideoHTML() }}
           style={styles.video}
           onMessage={onMessage}
           allowsFullscreenVideo={true}
+          allowsInlineMediaPlayback={true}
           mediaPlaybackRequiresUserAction={false}
           javaScriptEnabled={true}
           domStorageEnabled={true}
@@ -252,19 +314,51 @@ const VideoPlayerScreen = ({ route, navigation }) => {
           scrollEnabled={false}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
+          allowsBackForwardNavigationGestures={false}
+          allowsLinkPreview={false}
+          onShouldStartLoadWithRequest={() => true}
+          onError={(syntheticEvent) => {
+            const { nativeEvent } = syntheticEvent;
+            console.warn('WebView error: ', nativeEvent);
+          }}
+          onHttpError={(syntheticEvent) => {
+            const { nativeEvent } = syntheticEvent;
+            console.warn('WebView HTTP error: ', nativeEvent);
+          }}
         />
+        
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={handleBackPress}
+        >
+          <FontAwesome name="arrow-left" size={20} color="#fff" />
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={styles.fullscreenButton}
+          onPress={() => {
+            if (webViewRef.current) {
+              webViewRef.current.postMessage('toggleFullscreen');
+            }
+          }}
+        >
+          <FontAwesome 
+            name={isFullScreen ? "compress" : "expand"} 
+            size={20} 
+            color="#fff" 
+          />
+        </TouchableOpacity>
       </View>
 
-      {/* Description Section */}
       <ScrollView style={styles.descriptionContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.descriptionHeader}>
-          <Text style={styles.videoTitle}>{videoTitle}</Text>
+          <Text style={styles.videoTitle}>{title}</Text>
           <TouchableOpacity style={styles.likeButton}>
             <FontAwesome name="heart-o" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.videoGenre}>{videoGenre}</Text>
+        <Text style={styles.videoGenre}>{genre}</Text>
         
         <View style={styles.actionButtons}>
           <TouchableOpacity style={styles.actionButton}>
@@ -307,20 +401,20 @@ const VideoPlayerScreen = ({ route, navigation }) => {
 
         <View style={styles.descriptionSection}>
           <Text style={styles.descriptionTitle}>Description</Text>
-          <Text style={styles.descriptionText}>{videoDescription}</Text>
+          <Text style={styles.descriptionText}>{description}</Text>
         </View>
 
         <View style={styles.castSection}>
           <Text style={styles.castTitle}>Cast</Text>
-          <Text style={styles.castText}>Jared Leto, Matt Smith, Adria Arjona, Jared Harris</Text>
+          <Text style={styles.castText}>{cast}</Text>
         </View>
 
         <View style={styles.directorSection}>
           <Text style={styles.directorTitle}>Director</Text>
-          <Text style={styles.directorText}>Daniel Espinosa</Text>
+          <Text style={styles.directorText}>{director}</Text>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -329,15 +423,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#001122',
   },
+  headerContainer: {
+    backgroundColor: '#001122',
+  },
   videoContainer: {
     width: width,
     height: width * 9 / 16,
-    backgroundColor: '#001122',
-    marginTop: 0,
+    backgroundColor: '#000',
+    position: 'relative',
   },
   video: {
     flex: 1,
-    backgroundColor: '#001122',
+    backgroundColor: '#000',
   },
   backButton: {
     position: 'absolute',
@@ -346,7 +443,19 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  fullscreenButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,

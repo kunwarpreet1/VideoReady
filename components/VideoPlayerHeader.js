@@ -6,7 +6,6 @@ const VideoPlayerHeader = () => {
     <View style={styles.header}>
       <Image source={require('../assets/images/logo.png')} style={styles.logo} />
     </View>
-    
   );
 };
 
@@ -15,11 +14,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-  
-    
     backgroundColor: '#001122',
     height: 60,
-    borderWidth:1,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   logo: {
     width: 40,
