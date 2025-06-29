@@ -69,7 +69,7 @@ function CustomDrawerContent(props) {
             if (!success) {
               Alert.alert('Error', 'Failed to sign out. Please try again.');
             }
-            // Navigation will automatically handle the redirect to sign-in
+                // Navigation will automatically handle the redirect to sign-in
           },
         },
       ]

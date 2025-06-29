@@ -287,9 +287,7 @@ const EditProfile = ({ navigation }) => {
           </View>
 
           {/* User Genres */}
-          <UserGenres 
-            onEditPress={() => navigation.navigate('Genre', { isEditing: true })}
-          />
+          
         </View>
 
         {/* Submit Button */}

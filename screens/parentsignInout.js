@@ -19,14 +19,14 @@ const parentsignInout = () => {
       
       {/* Tab Navigator */}
       <View style={{ flex: 1 }}>
-        <tab.Navigator screenOptions={{
-          tabBarStyle: { backgroundColor: '#001122' },
-          tabBarLabelStyle: { color: 'white', fontWeight: "700" },
-          tabBarIndicatorStyle: { backgroundColor: 'white' }
-        }}>
-          <tab.Screen name="SignIn" component={SignIn} />
-          <tab.Screen name="SignUp" component={SignUp} />
-        </tab.Navigator>
+      <tab.Navigator screenOptions={{
+        tabBarStyle: { backgroundColor: '#001122' },
+        tabBarLabelStyle: { color: 'white', fontWeight: "700" },
+        tabBarIndicatorStyle: { backgroundColor: 'white' }
+      }}>
+        <tab.Screen name="SignIn" component={SignIn} />
+        <tab.Screen name="SignUp" component={SignUp} />
+      </tab.Navigator>
       </View>
     </SafeAreaView>
   )

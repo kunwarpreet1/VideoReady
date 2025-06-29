@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
+import VRLogo from '../assets/images/signInlogo.svg'
 
 const SignInHeader = () => {
   return (
     <View style={styles.header}>
-      <Text style={styles.title}>VideoReady</Text>
+      <VRLogo width={200} height={30} />
     </View>
   )
 }
@@ -13,10 +14,10 @@ const styles = StyleSheet.create({
   header: {
     height: 60,
     backgroundColor: '#001122',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#334',
+    gap: 10,
   },
   title: {
     fontSize: 18,

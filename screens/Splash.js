@@ -14,7 +14,7 @@ const Splash = () => {
     const timer = setTimeout(() => {
       // Only navigate if navigation is available
       if (navigation) {
-        navigation.replace('Onboarding');
+      navigation.replace('Onboarding');
       }
     }, 6000); // 6-second splash screen
 

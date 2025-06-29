@@ -16,14 +16,12 @@ import {
   selectIsLoading
 } from '../src/redux/slice/userSlice';
 import SignInHeader from '../components/SignInHeader';
-import VideoPlayerHeader from '../components/VideoPlayerHeader';
 import LoadingScreen from '../components/LoadingScreen';
 import Splash from '../screens/Splash';
 import Onboarding from '../screens/Onboarding';
 import SignUp from '../screens/SignUp';
 import SignIn from '../screens/SignIn';
 import Genre from '../screens/Genre';
-import HomeScreen from '../screens/Home'
 import PhoneAuthScreen from '../screens/PhoneAuthScren';
 import parentsignInout from '../screens/parentsignInout';
 import camera from '../screens/camera';
@@ -43,7 +41,6 @@ const AppContent = () => {
   const [initializing, setInitializing] = useState(true);
 
   useEffect(() => {
-    // Load user from AsyncStorage on app start
     const initializeApp = async () => {
       try {
         await dispatch(loadUserFromStorage());
@@ -99,6 +96,7 @@ const AppContent = () => {
         {isAuthenticated && currentUser ? (
           <>
             <Stack.Screen name="HomeDrawer" component={HomeDrawer} />
+            <Stack.Screen name="Genre" component={Genre} />
             <Stack.Screen name="camera" component={camera} />
             <Stack.Screen name="Location" component={Location} />
             <Stack.Screen name="EditProfile" component={EditProfile} />
@@ -116,14 +114,7 @@ const AppContent = () => {
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="Genre" component={Genre} />
             <Stack.Screen name="PhoneAuth" component={PhoneAuthScreen} />
-            <Stack.Screen
-              name="ParentSignInOut"
-              component={parentsignInout}
-              options={{
-                headerShown: true,
-                header: () => <SignInHeader />
-              }}
-            />
+            <Stack.Screen name="ParentSignInOut" component={parentsignInout}/>
           </>
         )}
       </Stack.Navigator>

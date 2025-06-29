@@ -7,24 +7,17 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { handleUserAuth } from '../utils/userUtils';
 import auth from '@react-native-firebase/auth';
 
 const SignIn = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const signInUser = async () => {
     try {
-      const userCredential = await auth().signInWithEmailAndPassword(email, password);
-      const firebaseUser = userCredential.user;
-      
-      // Handle user authentication using utility function
-      await handleUserAuth(dispatch, firebaseUser);
+      await auth().signInWithEmailAndPassword(email, password);
       
       Alert.alert('Success', 'Signed in successfully!');
       navigation.replace('HomeDrawer');
